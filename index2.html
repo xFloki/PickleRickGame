@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Game</title>
+    <script type="text/javascript" src="./js/src/model/Map.js"></script>
+    <script type="text/javascript" src="./js/src/model/Lvl1.js"></script>
+    <script type="text/javascript" src="./js/src/model/Player.js"></script>
+  </head>
+  <body>
+
+  <canvas width="1200px" height="600px"></canvas>
+  <script>
+
+  var sprite = new Image();
+  sprite.src = './img/Platfor_Tiles_Free.png'
+
+  var player = new Player();
+
+
+  var map = new Lvl1();
+
+  var canvas = document.querySelector("canvas");
+  var context = canvas.getContext("2d");
+
+  var scale = 3;
+  var image, width, height;
+//context.drawImage(sprite, 774, 1093, 256, 256, 0, 0,   100, 100);
+sprite.onload = function() {
+    paintMap()
+  }
+
+  function paintMap(){
+    for (var c = 0; c < map.tiles.length; c++) {
+      console.log(c);
+      for (var r = 0; r < map.tiles[c].length; r++) {
+          console.log(map.tiles[c].length);
+          switch (map.tiles[c][r]) {
+            case 00:
+             image = map.atlas.TextureAtlas.SubTexture[0];
+             width = image['-width'] / scale;
+             height = image['-height'] / scale;
+            context.drawImage(sprite, image['-x'], image['-y'], image['-width'], image['-height'],
+               width*r, height*c,   width, height);
+            break;
+            case 02:
+             image = map.atlas.TextureAtlas.SubTexture[1];
+             width = image['-width'] / scale;
+             height = image['-height'] / scale;
+            context.drawImage(sprite, image['-x'], image['-y'], image['-width'], image['-height'],
+               width*c, height,   width, height);
+            break;
+            case 03:
+             image = map.atlas.TextureAtlas.SubTexture[2];
+             width = image['-width'] / scale;
+             height = image['-height'] / scale;
+            context.drawImage(sprite, image['-x'], image['-y'], image['-width'], image['-height'],
+               width*c, height*r,   width, height);
+            break;
+
+            case 34:
+             image = map.atlas.TextureAtlas.SubTexture[33];
+             width = image['-width'] / scale;
+             height = image['-height'] / scale;
+            context.drawImage(sprite, image['-x'], image['-y'], image['-width'], image['-height'],
+               width*r, height*c,   width, height);
+            break;
+
+            case 35:
+             image = map.atlas.TextureAtlas.SubTexture[34];
+             width = image['-width'] / scale;
+             height = image['-height'] / scale;
+            context.drawImage(sprite, image['-x'], image['-y'], image['-width'], image['-height'],
+               width*c, height*r,   width, height);
+            break;
+
+          }
+        }
+      }
+  }
+
+
+  </script>
+  </body>
+</html>

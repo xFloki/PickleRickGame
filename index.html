@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Game</title>
+    <!-- <script type="text/javascript" src="./js/src/model/view/"></script>
+    <script type="text/javascript" src="./js/src/view/view/"></script> -->
+  </head>
+  <body>
+
+  <canvas></canvas>
+  <script>
+  var sand = new Image();
+  var metal = new Image();
+  var sky = new Image();
+  var box = new Image();
+  var sprite = new Image();
+
+  sand.src = './img/platform_tile_001.png';
+  metal.src = 'img/platform_tile_018.png';
+  sky.src = 'img/platform_tile_034.png';
+  box.src = 'img/platform_tile_035.png';
+  sprite.src = './img/Platfor_Tiles_Free.png'
+
+
+    function Stage () {
+      this.tileSize = 50;
+      this.map = [
+        [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+        [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+        [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+        [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+        [3,3,3,3,3,2,3,3,3,3,3,3,3,2,3,3],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      ];
+
+
+      this.draw = function(ctx) {
+
+        this.map.forEach((row, y) => {
+          row.forEach((id, x) => {
+            var xpos = x * this.tileSize;
+            var ypos = y * this.tileSize;
+
+            var ghost = {
+              x: 50,
+              y: 50,
+            }
+
+            console.log(id);
+
+            switch (id) {
+              case 0:
+                ctx.drawImage(sand, xpos, ypos, ghost.x, ghost.y);
+                break;
+              case 1:
+                ctx.drawImage(metal, xpos, ypos, ghost.x, ghost.y);
+                break;
+              case 2:
+                ctx.drawImage(box, xpos, ypos, ghost.x, ghost.y);
+                break;
+              case 3:
+                ctx.drawImage(sky, xpos, ypos, ghost.x, ghost.y);
+                break;
+
+              default: ctx.drawImage(sand, xpos, ypos, ghost.x, ghost.y);
+
+            }
+
+          });
+        });
+      }
+    }
+
+
+    function App () {
+      console.log("CANVAS");
+      var canvas = document.querySelector("canvas");
+      var ctx = canvas.getContext("2d");
+      var stage = new Stage();
+      canvas.width = stage.tileSize * stage.map[0].length;
+      canvas.height = stage.tileSize * stage.map.length;
+      stage.draw(ctx)
+    }
+
+     sand.onload = function () {
+       metal.onload = function() {
+         sky.onload = function() {
+           box.onload = function() {
+                app = new App();
+           }
+         }
+       }
+   }
+
+
+  </script>
+  </body>
+</html>
