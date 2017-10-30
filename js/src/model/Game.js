@@ -12,8 +12,6 @@ function Game(canvas, player) {
   this.currentMap = this.firstMap.tiles;
   this.currentMapArray = this.firstMap.atlas.TextureAtlas.SubTexture;
 
-  this.trys = 0;
-
   // Weapons start activated
   this.activado = true;
   this.player = player;
@@ -45,6 +43,7 @@ Game.prototype.update = function() {
 
 
 Game.prototype.drawPlayer = function() {
+
   var image = this.currentMapArray[22];
   var width = image['-width'] / this.scale;
   var height = image['-height'] / this.scale;
@@ -101,12 +100,34 @@ Game.prototype.drawBoard = function(primera) {
           this.drawObject(35, r, c, undefined, true);
           break;
 
+          // SIGN
+          case 44:
+            this.drawObject(34, r, c);
+            this.drawObject(44, r, c, true, false);
+          break;
+          // SIGN
+          case 45:
+            this.drawObject(34, r, c);
+            this.drawObject(45, r, c);
+          break;
+          // SIGN
+          case 46:
+            this.drawObject(34, r, c);
+            this.drawObject(46, r, c, false, false);
+          break;
+          // SIGN
+          case 48:
+            this.drawObject(34, r, c);
+            this.drawObject(48, r, c);
+          break;
+
         // SIGN
         case 50:
           this.drawObject(34, r, c);
           this.drawObject(50, r, c, true, false);
         break;
 
+        // SPIKES
         case 62:
 
           image = this.currentMapArray[62 - 1];
@@ -136,6 +157,10 @@ Game.prototype.drawBoard = function(primera) {
       }
     }
   }
+
+  this.context.fillStyle = 'blue';
+  this.context.font = '20pt Calibri';
+  this.context.fillText("Trys : " + this.player.trys, 10,35);
 };
 
 Game.prototype.drawObject = function(n,r,c,resta,add) {
@@ -143,9 +168,11 @@ Game.prototype.drawObject = function(n,r,c,resta,add) {
   image = this.currentMapArray[n - 1];
   width = image['-width'] / this.scale;
   height = image['-height'] / this.scale;
-  if (resta == undefined){ var resta = 0; } else { var resta = height; c +=1; }
+  if (resta != true){ var resta = 0; } else {
+     var resta = height; c +=1; 
+   }
   this.context.drawImage(sprite, image['-x'], image['-y'], image['-width'], image['-height'],
-    width * r, 256/this.scale * c - resta, width, height);
+    256/this.scale * r, 256/this.scale * c - resta, width, height);
   if(add == true){
       this.obstacles.push(new Ground(width, height, width * r, 256/this.scale * c -resta));
   }

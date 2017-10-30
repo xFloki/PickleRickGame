@@ -15,6 +15,7 @@ function Player () {
 Player.prototype.die = function(){
   this.posX = this.startingPoint[0];
   this.posY = this.startingPoint[1];
+  this.trys++;
 
 };
 
