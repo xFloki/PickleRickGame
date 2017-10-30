@@ -15,6 +15,9 @@ function Game(canvas, player) {
   // Weapons start activated
   this.activado = true;
   this.player = player;
+  this.mainInterval = 0;
+
+  this.isPaused = false;
   this.keys = [];
 }
 
@@ -51,10 +54,19 @@ Game.prototype.drawPlayer = function() {
     this.player.posX, this.player.posY, width, height);
 }
 
+// Game.prototype.changeArmo = function(){
+//   var that = this;
+//     if (that.activado == false) {
+//       that.activado = true;
+//     } else {
+//       that.activado = false;
+//     }
+//   };
+
 Game.prototype.drawBoard = function(primera) {
   if (primera != undefined) {
     var that = this;
-    setInterval(function() {
+     this.armorInteval = setInterval(function() {
 
       if (that.activado == false) {
         that.activado = true;
@@ -64,9 +76,10 @@ Game.prototype.drawBoard = function(primera) {
     }, 1000);
   }
 
-  for (var c = 0; c < this.currentMap.length; c++) {
-    for (var r = 0; r < this.currentMap[c].length; r++) {
-      switch (this.currentMap[c][r]) {
+for (var a = 0; a < this.currentMap.length; a++) {
+  for (var c = 0; c < this.currentMap[a].length; c++) {
+    for (var r = 0; r < this.currentMap[a][c].length; r++) {
+      switch (this.currentMap[a][c][r]) {
 
         // GROUND
         case 01:
@@ -86,7 +99,6 @@ Game.prototype.drawBoard = function(primera) {
         // METAL PLATFORM
         case 26:
 
-          this.drawObject(34, r, c);
           this.drawObject(26, r, c,true, true);
           break;
 
@@ -102,29 +114,28 @@ Game.prototype.drawBoard = function(primera) {
 
           // SIGN
           case 44:
-            this.drawObject(34, r, c);
             this.drawObject(44, r, c, true, false);
           break;
+
           // SIGN
           case 45:
-            this.drawObject(34, r, c);
             this.drawObject(45, r, c);
           break;
+
           // SIGN
           case 46:
-            this.drawObject(34, r, c);
             this.drawObject(46, r, c, false, false);
           break;
+
           // SIGN
           case 48:
-            this.drawObject(34, r, c);
             this.drawObject(48, r, c);
           break;
 
         // SIGN
         case 50:
-          this.drawObject(34, r, c);
-          this.drawObject(50, r, c, true, false);
+          this.drawObject(50, r, c, true);
+          this.obstacles.push(new Obstacle("GOAL",width, height, 256/this.scale * r, 256/this.scale * c));
         break;
 
         // SPIKES
@@ -149,7 +160,20 @@ Game.prototype.drawBoard = function(primera) {
              this.obstacles.push(new Spikes(width, height, heightON, width * r, height * c, height * c - (heightON - height)));
            }
           break;
-          // Secret Break with no collision to reach goal
+
+          case 72:
+
+            var image = this.currentMapArray[72 - 1];
+            var width = image['-width'] / this.scale;
+            var height = image['-height'] / this.scale;
+
+
+            this.drawObject(72, r, c);
+
+
+            break;
+
+        // Secret Break with no collision to reach goal
         case 99:
           this.drawObject(1, r, c);
           break;
@@ -157,26 +181,33 @@ Game.prototype.drawBoard = function(primera) {
       }
     }
   }
+}
+
 
   this.context.fillStyle = 'blue';
   this.context.font = '20pt Calibri';
-  this.context.fillText("Trys : " + this.player.trys, 10,35);
+  this.context.fillText("Tries : " + this.player.trys, 10,35);
 };
 
 Game.prototype.drawObject = function(n,r,c,resta,add) {
 
-  image = this.currentMapArray[n - 1];
-  width = image['-width'] / this.scale;
-  height = image['-height'] / this.scale;
+  var image = this.currentMapArray[n - 1];
+  var width = image['-width'] / this.scale;
+  var height = image['-height'] / this.scale;
   if (resta != true){ var resta = 0; } else {
-     var resta = height; c +=1; 
+     var resta = height; c +=1;
    }
   this.context.drawImage(sprite, image['-x'], image['-y'], image['-width'], image['-height'],
     256/this.scale * r, 256/this.scale * c - resta, width, height);
   if(add == true){
-      this.obstacles.push(new Ground(width, height, width * r, 256/this.scale * c -resta));
+      this.obstacles.push(new Ground(width, height, 256/this.scale * r, 256/this.scale * c -resta));
   }
 
+}
+
+Game.prototype.pause = function() {
+  clearInterval(this.armorInteval);
+  clearInterval(this.mainInterval);
 }
 
 Game.prototype.start = function() {
@@ -186,7 +217,7 @@ Game.prototype.start = function() {
   // later check collisions
   this.drawBoard('primera');
 
-  setInterval(function(){
+  this.mainInterval = setInterval(function(){
     that.update();
     that.context.clearRect(0, 0, 2000, 2000);
     that.drawBoard();

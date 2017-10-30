@@ -513,4 +513,4 @@ Map.prototype.atlas = {
       }
     ]
   }
-}
+};

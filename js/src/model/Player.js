@@ -44,12 +44,14 @@ Player.prototype.move = function (obstacles, activated) {
 
       // Move rectangle along x axis
       if (this.collides(x, rect, activated)) {
+          if(rect.name == "GOAL") console.log("MAQUINA");
           if (vx < 0) vx = rect.posX + rect.width - p.posX;
           if (vx > 0) vx = rect.posX - p.posX - p.width;
       }
 
       // Move rectangle along y axis
       if (this.collides(y, rect, activated)) {
+        if(rect.name == "GOAL") console.log("MAQUINA");
         if(rect.name == "SPIKES" && activated == true){
           // Die and reset to Starting position
           this.die();
@@ -66,7 +68,7 @@ Player.prototype.move = function (obstacles, activated) {
 
 // Returns true iff a and b overlap
  Player.prototype.collides = function(a, b, activated) {
-    if (b.name == "SPIKES" && activated == true) {
+   if (b.name == "SPIKES" && activated == true) {
       var x = a.x <= b.posX + b.width && a.x + a.w > b.posX ;
       var y = a.y <= b.posYOn + b.heightON  && a.y + a.h > b.posYOn ;
       return  x && y;

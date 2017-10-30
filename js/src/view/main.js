@@ -12,7 +12,22 @@ window.onload = function() {
 
 document.onkeydown = document.onkeyup = function (e) {
     game.keys[e.which || e.keyCode] = e.type === "keydown";
+
 };
+
+ document.onkeypress = function (e) {
+   if ( e.keyCode == 80 || e.keyCode == 112 ) {
+     if(game.isPaused){
+       game.start();
+       game.isPaused = false;
+     } else {
+       game.pause();
+       game.isPaused = true;
+     }
+
+    }
+
+ };;
 
 sprite.onload = function() {
     game = new Game(canvas,player);
