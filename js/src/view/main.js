@@ -17,8 +17,6 @@ document.onkeydown = document.onkeyup = function (e) {
 sprite.onload = function() {
     game = new Game(canvas,player);
     game.start();
-
 };
-
 
 };
