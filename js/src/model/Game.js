@@ -7,7 +7,7 @@ function Game(canvas, player) {
 
   this.scale = 5;
   this.obstacles = [];
-  this.firstMap = new Lvl1();
+  this.firstMap = new Lvl2();
 
   this.currentMap = this.firstMap.tiles;
   this.currentMapArray = this.firstMap.atlas.TextureAtlas.SubTexture;
@@ -19,10 +19,29 @@ function Game(canvas, player) {
 
   this.isPaused = false;
   this.keys = [];
+
+  this.moved = 0;
+
 }
 
 var sprite = new Image();
 sprite.src = './img/Platfor_Tiles_Free.png'
+var rick = new Image()
+rick.src = './img/picklerick0.png'
+var rick1 = new Image()
+rick1.src = './img/picklerick1.png'
+var picklewalkLeft = new Image()
+picklewalkLeft.src = './img/picklewalk-left.png'
+var picklewalkLeft1 = new Image()
+picklewalkLeft1.src = './img/picklewalk-left1.png'
+var picklewalkLeft2 = new Image()
+picklewalkLeft2.src = './img/picklewalk-left2.png'
+var picklewalkRight = new Image()
+picklewalkRight.src = './img/picklewalk-right.png'
+var picklewalkRight1 = new Image()
+picklewalkRight1.src = './img/picklewalk-right1.png'
+var picklewalkRight2 = new Image()
+picklewalkRight2.src = './img/picklewalk-right2.png'
 
 Game.prototype.update = function() {
   // Gravity
@@ -46,12 +65,66 @@ Game.prototype.update = function() {
 
 
 Game.prototype.drawPlayer = function() {
+  if(this.firstMap.name == "Lvl1"){
+    var width = rick.width ;
+    var height = rick.height;
+    if(this.keys[37]){
+      var image = rick;
+      this.context.drawImage(rick, this.player.posX, this.player.posY, 30, 60);
+    } else {
+      this.context.drawImage(rick1, this.player.posX, this.player.posY, 30, 60);
+    }
+  } else {
+    var width = rick.width ;
+    var height = rick.height;
+    if(this.keys[37]){
+      if (this.player.posX < this.canvas.width/2 - this.player.width) {
+        this.moved += 1;
+        this.context.translate(this.player.velX * -1,0);
 
-  var image = this.currentMapArray[22];
-  var width = image['-width'] / this.scale;
-  var height = image['-height'] / this.scale;
-  this.context.drawImage(sprite, image['-x'], image['-y'], image['-width'], image['-height'],
-    this.player.posX, this.player.posY, width, height);
+      }
+      switch (this.player.image) {
+        case picklewalkLeft1:
+        this.context.drawImage(picklewalkLeft, this.player.posX, this.player.posY, 50, 80);
+        this.player.image = picklewalkLeft;
+        break;
+        case picklewalkLeft:
+        this.context.drawImage(picklewalkLeft2, this.player.posX, this.player.posY, 50, 80);
+        this.player.image = picklewalkLeft2;
+        break;
+        default:
+        this.context.drawImage(picklewalkLeft1, this.player.posX, this.player.posY, 50, 80);
+        this.player.image = picklewalkLeft1;
+      }
+    } else if (this.keys[39]){
+      if (this.player.posX + this.moved > this.canvas.width/2) {
+        this.moved += 1;
+        this.context.translate(this.player.velX * -1,0);
+      }
+        console.log(this.moved);
+      switch (this.player.image) {
+        case picklewalkRight1:
+        this.context.drawImage(picklewalkRight, this.player.posX, this.player.posY, 50, 80);
+        this.player.image = picklewalkRight;
+        break;
+        case picklewalkRight:
+        this.context.drawImage(picklewalkRight2, this.player.posX, this.player.posY, 50, 80);
+        this.player.image = picklewalkRight2;
+        break;
+        default:
+        this.context.drawImage(picklewalkRight1, this.player.posX, this.player.posY, 50, 80);
+        this.player.image = picklewalkRight1;
+      }
+    } else {
+      this.context.drawImage(picklewalkRight, this.player.posX, this.player.posY, 50, 80);
+      this.player.image = picklewalkRight;
+    }
+  }
+
+
+
+
+
 }
 
 // Game.prototype.changeArmo = function(){
@@ -162,14 +235,11 @@ for (var a = 0; a < this.currentMap.length; a++) {
           break;
 
           case 72:
-
             var image = this.currentMapArray[72 - 1];
             var width = image['-width'] / this.scale;
             var height = image['-height'] / this.scale;
 
-
             this.drawObject(72, r, c);
-
 
             break;
 
@@ -195,7 +265,7 @@ Game.prototype.drawObject = function(n,r,c,resta,add) {
   var width = image['-width'] / this.scale;
   var height = image['-height'] / this.scale;
   if (resta != true){ var resta = 0; } else {
-     var resta = height; c +=1;
+     var resta = height; c += 1;
    }
   this.context.drawImage(sprite, image['-x'], image['-y'], image['-width'], image['-height'],
     256/this.scale * r, 256/this.scale * c - resta, width, height);

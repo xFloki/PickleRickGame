@@ -12,6 +12,7 @@ window.onload = function() {
 
 document.onkeydown = document.onkeyup = function (e) {
     game.keys[e.which || e.keyCode] = e.type === "keydown";
+  //onsole.log(game.keys);
 
 };
 

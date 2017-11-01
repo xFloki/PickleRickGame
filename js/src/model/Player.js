@@ -1,12 +1,14 @@
 function Player () {
   this.width = 50;
-  this.height = 50;
+  this.height = 80;
   this.startingPoint = [256/5 * 2, 256/5*4];
   this.posX = this.startingPoint[0];
   this.posY = this.startingPoint[1];
   this.velX = 0;
   this.velY = 0;
   this.onFloor = false;
+
+  this.image = "";
 
   this.trys = 0;
 

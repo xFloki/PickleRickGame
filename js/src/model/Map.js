@@ -1,6 +1,6 @@
-function Map(tileArray) {
+function Map(name,tileArray) {
+  this.name = name;
   this.tiles = tileArray;
-
 }
 
 Map.prototype.atlas = {
