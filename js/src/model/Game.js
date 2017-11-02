@@ -41,29 +41,29 @@ function Game(canvas, lvl = "Lvl1") {
 }
 
 var sprite = new Image();
-sprite.src = './img/Platfor_Tiles_Free.png'
+sprite.src = '../img/Platfor_Tiles_Free.png'
 var rick = new Image()
-rick.src = './img/picklerick0.png'
+rick.src = '../img/picklerick0.png'
 var rick1 = new Image()
-rick1.src = './img/picklerick1.png'
+rick1.src = '../img/picklerick1.png'
 var picklewalkLeft = new Image()
-picklewalkLeft.src = './img/picklewalk-left.png'
+picklewalkLeft.src = '../img/picklewalk-left.png'
 var picklewalkLeft1 = new Image()
-picklewalkLeft1.src = './img/picklewalk-left1.png'
+picklewalkLeft1.src = '../img/picklewalk-left1.png'
 var picklewalkLeft2 = new Image()
-picklewalkLeft2.src = './img/picklewalk-left2.png'
+picklewalkLeft2.src = '../img/picklewalk-left2.png'
 var picklewalkRight = new Image()
-picklewalkRight.src = './img/picklewalk-right.png'
+picklewalkRight.src = '../img/picklewalk-right.png'
 var picklewalkRight1 = new Image()
-picklewalkRight1.src = './img/picklewalk-right1.png'
+picklewalkRight1.src = '../img/picklewalk-right1.png'
 var picklewalkRight2 = new Image()
-picklewalkRight2.src = './img/picklewalk-right2.png'
+picklewalkRight2.src = '../img/picklewalk-right2.png'
 var ratBoss = new Image()
-ratBoss.src = './img/ratboss.png'
+ratBoss.src = '../img/ratboss.png'
 var ratBossDead = new Image()
-ratBossDead.src = './img/ratboss-dead.png'
+ratBossDead.src = '../img/ratboss-dead.png'
 var bulletImage = new Image()
-bulletImage.src = './img/bullet.png'
+bulletImage.src = '../img/bullet.png'
 
 Game.prototype.update = function() {
   // Gravity

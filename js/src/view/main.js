@@ -3,9 +3,9 @@ window.onload = function() {
   var canvas = document.querySelector("canvas");
 
   var sprite = new Image();
-  sprite.src = './img/Platfor_Tiles_Free.png';
+  sprite.src = '../img/Platfor_Tiles_Free.png';
 
-  var audio = new Audio('./sounds/swifty.mp3');
+  var audio = new Audio('../sounds/swifty.mp3');
   // Property for audios to replay song when it is over
   audio.loop = true;
   audio.play();
