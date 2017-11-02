@@ -22,10 +22,10 @@ Bullet.prototype.moveBullet = function() {
 };
 
 Bullet.prototype.moveToLocation = function() {
-  var movX = (this.posX - this.destination.posX) / this.velX;
-  movY = (this.posY - this.destination.posY) / movX;
-  this.posX -= movX;
-  this.posY -= movY;
+  // var movX = (this.posX - this.destination.posX) / this.velX;
+  // movY = (this.posY - this.destination.posY) / movX;
+  this.posX -= 1;
+  // this.posY -= movY;
 };
 
 Bullet.prototype.checkDestination = function() {

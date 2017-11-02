@@ -4,12 +4,7 @@ window.onload = function() {
 
   var sprite = new Image();
   sprite.src = '../img/Platfor_Tiles_Free.png';
-
-  var audio = new Audio('../sounds/swifty.mp3');
-  // Property for audios to replay song when it is over
-  audio.loop = true;
-  audio.play();
-
+  var scores = [];
 
 document.onkeydown = document.onkeyup = function (e) {
     game.keys[e.which || e.keyCode] = e.type === "keydown";
@@ -27,7 +22,7 @@ document.onkeydown = document.onkeyup = function (e) {
 
    } else if( e.keyCode == 32 && game.firstMap.name !== "Lvl1"){
       game.player.shoot();
-      game.boss.shootPlayer(game.player);
+      game.obstacles.push(game.boss.shootPlayer());
     }
 
  };;
@@ -41,7 +36,7 @@ sprite.onload = function() {
 
 function refreshGame(){
   game.update();
-  game.context.clearRect(0, 0, 2000, 2000);
+  game.context.clearRect(0, 0, 4000, 2000);
   game.drawBoard();
   game.drawPlayer();
   game.drawBullet();
@@ -59,8 +54,11 @@ function changeLvl() {
       case "Lvl1":
       game = new Game(canvas, "Lvl2");
       game.drawBoard('primera');
-        break;
+       break;
       case "Lvl2":
+      scores.push([game.player.trys, new Date()]);
+      console.log(scores);
+      pauseGame();
         break;
       default:
     }

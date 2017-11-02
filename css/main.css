@@ -29,10 +29,26 @@ section.press button {
   font-size: 22px;
   font-weight: bolder;
   margin-left: 250px;
+  margin-top: 50px;
+}
+
+#play {
   margin-top: 250px;
 }
 
 section.press button:hover,
 section.press button.hover {
   background-color: #417cb8
+}
+
+.blurred {
+   filter: blur(10px);
+   display: block;
+}
+
+.pause {
+  display: block;
+  position: absolute;
+  top: 50%; left:48%;
+  transform: translate(-50%,-50%);
 }

@@ -1,4 +1,4 @@
-function Player () {
+function Player (context) {
   this.width = 50;
   this.height = 80;
   this.startingPoint = [256/5 * 2, 256/5*4];
@@ -14,12 +14,33 @@ function Player () {
 
   this.bullets = [];
 
+  this.context = context;
+
 }
 
 Player.prototype.die = function(){
+
   this.posX = this.startingPoint[0];
   this.posY = this.startingPoint[1];
   this.trys++;
+
+  console.log("Muere");
+  var audio;
+  var randomDead = Math.floor(Math.random() * 3);
+  switch (randomDead) {
+    case 0:
+       audio = new Audio('../sounds/die1.mp3');
+    break;
+    case 1:
+      audio = new Audio('../sounds/die2.wav');
+    break;
+    case 2:
+      audio = new Audio('../sounds/die3.wav');
+    break;
+    default: audio = new Audio('../sounds/die1.mp3');
+  }
+
+  audio.play();
 
 };
 
@@ -49,6 +70,7 @@ Player.prototype.move = function (obstacles, activated) {
       // Move rectangle along x axis
       if (this.collides(x, rect, activated)) {
           if(rect.name == "GOAL") this.winner = true;
+
           if (vx < 0) vx = rect.posX + rect.width - p.posX;
           if (vx > 0) vx = rect.posX - p.posX - p.width;
       }
@@ -88,6 +110,8 @@ Player.prototype.move = function (obstacles, activated) {
 Player.prototype.shoot = function() {
     console.log("Shoot AMMO");
     if(this.bullets.length < 1){
+        var audio = new Audio('../sounds/laser.wav');
+        audio.play();
         this.bullets.push(new Bullet(this.posX, this.posY));
     }
 
@@ -105,6 +129,11 @@ Player.prototype.checkCollisionBullets = function(enemy) {
     if(this.collides(this.bullets[i], enemy)) {
       enemy.hp -= this.bullets[i].damage;
       this.bullets.splice(i);
+      if(enemy.hp === 0) {
+        var that = this;
+        setTimeout(function(){
+          that.winner = true; }, 1500);
+      }
     };
   }
 };

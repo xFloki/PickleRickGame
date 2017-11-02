@@ -1,8 +1,8 @@
 function Game(canvas, lvl = "Lvl1") {
-  this.player = new Player();
-
   this.canvas = canvas;
   this.context = canvas.getContext('2d');
+
+  this.player = new Player(this.context);
 
 
   switch (lvl) {
@@ -16,7 +16,6 @@ function Game(canvas, lvl = "Lvl1") {
 
   }
 
-  console.log(this.firstMap);
   this.width = canvas.width = 1200;
   this.height = canvas.height = 600;
 
@@ -64,33 +63,33 @@ var ratBossDead = new Image()
 ratBossDead.src = '../img/ratboss-dead.png'
 var bulletImage = new Image()
 bulletImage.src = '../img/bullet.png'
+var ratilla = new Image();
+ratilla.src = '../img/ratilla.png'
 
 Game.prototype.update = function() {
   // Gravity
   this.player.velY += 1;
   // Right - Left movement
   this.player.velX = 6 * (!!this.keys[39] - !!this.keys[37]); //
-
   // Move the player and detect collisions
   var expectedY = this.player.posY + this.player.velY;
   this.player.move(this.obstacles, this.activado);
-
   this.player.onFloor = expectedY > this.player.posY;
-
   if (expectedY !== this.player.posY) this.player.velY = 0;
 
-  // PLAYER ONLY CAN JUMP IS HE IS ON THE FLOOR
+  // PLAYER ONLY CAN JUMP IF HE IS ON THE FLOOR
   if (this.player.onFloor && this.keys[38]) {
     this.player.velY = -14;
   }
 
   this.player.updateBullets();
   this.player.checkCollisionBullets(this.boss);
-  if (this.boss != undefined) {
-      this.boss.updateBullets(this.player);
+  if (this.boss != undefined && this.bossAlive()) {
+      this.boss.updatePosition();
+      this.boss.updateRatillas();
+      this.dieFromRats();
+
   }
-
-
 };
 
 
@@ -148,15 +147,6 @@ Game.prototype.drawPlayer = function() {
   }
 
 }
-
-// Game.prototype.changeArmo = function(){
-//   var that = this;
-//     if (that.activado == false) {
-//       that.activado = true;
-//     } else {
-//       that.activado = false;
-//     }
-//   };
 
 Game.prototype.drawBoard = function(saveObjects) {
   if (saveObjects != undefined) {
@@ -279,6 +269,7 @@ Game.prototype.drawBoard = function(saveObjects) {
 
             if (saveObjects != undefined) {
               this.boss = new RatBoss(ratBoss.width, ratBoss.height, 256 / this.scale * r, 256 / this.scale * c);
+              this.obstacles.push(this.boss);
             }
 
             this.drawBoss(r, c);
@@ -322,12 +313,17 @@ Game.prototype.drawBullet = function() {
       this.player.bullets[i].posY + 25,
       this.player.bullets[i].width, this.player.bullets[i].height);
   }
+
+  // DRAW RATILLAS
   if (this.boss != undefined) {
-    if (this.boss.bullet[0] != undefined) {
-        this.context.drawImage(bulletImage,
-        this.boss.bullet[0].posX + this.boss.bullet.width,
-        this.boss.bullet[0].posY + 25,
-        this.boss.bullet[0].width, this.boss.bullet.height);
+    if (this.boss.ratillas.length > 0 ) {
+        for (var i = 0; i < this.boss.ratillas.length; i++) {
+          this.boss.ratillas[i]
+          this.context.drawImage(ratilla,
+            this.boss.ratillas[i].posX,
+            this.boss.ratillas[i].posY,
+            this.boss.ratillas[i].width, this.boss.ratillas[i].height);
+        }
     }
   }
 }
@@ -335,10 +331,10 @@ Game.prototype.drawBullet = function() {
 Game.prototype.drawBoss = function(r, c) {
   if (this.bossAlive()) {
     this.context.drawImage(ratBoss,
-      256 / this.scale * r, 256 / this.scale * c, ratBoss.width, ratBoss.height);
+      this.boss.posX, this.boss.posY, ratBoss.width, ratBoss.height);
   } else {
     this.context.drawImage(ratBossDead,
-      256 / this.scale * r, 256 / this.scale * c, ratBoss.width, ratBoss.height);
+      this.boss.posX, this.boss.posY, ratBoss.width, ratBoss.height);
   }
 
   var filledRect = this.boss.hp / 50
@@ -359,4 +355,24 @@ Game.prototype.pause = function() {
 
 Game.prototype.bossAlive = function() {
   return this.boss.hp > 0 ? true : false;
+}
+
+Game.prototype.dieFromRats = function () {
+
+    for (var i = 0; i < this.boss.ratillas.length; i++) {
+      if (this.player.collides(this.player,this.boss.ratillas[i]) ) {
+        this.context.translate(this.player.posX - this.width / 3, 0);
+        this.boss.ratillas = [];
+        this.boss.hp = this.boss.maxHp;
+        this.player.die();
+        console.log(this.boss.ratillas);
+
+      }
+    }
+    if (this.player.collides(this.player,this.boss)) {
+      this.context.translate(this.player.posX - this.width / 3, 0);
+      this.boss.ratillas = [];
+      this.boss.hp = this.boss.maxHp;
+      this.player.die();
+    }
 }
