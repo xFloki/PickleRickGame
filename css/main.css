@@ -5,3 +5,10 @@ canvas {
     margin-top: 100px;
 
 }
+
+
+#message {
+  position:absolute;
+  top:150px;
+  left:100px;
+}

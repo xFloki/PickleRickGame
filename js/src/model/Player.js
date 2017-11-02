@@ -7,10 +7,12 @@ function Player () {
   this.velX = 0;
   this.velY = 0;
   this.onFloor = false;
-
+  this.winner = false;
   this.image = "";
 
   this.trys = 0;
+
+  this.bullets = [];
 
 }
 
@@ -25,7 +27,7 @@ Player.prototype.die = function(){
 // as far as we can without colliding with a solid rectangle
 Player.prototype.move = function (obstacles, activated) {
   var p = this;
-  var vx = this.velX ;
+  var vx = this.velX ; //no se está modificando el  valor de velX ni VelY REFACTOR
   var vy = this.velY;
   var x = {};
   var y = {};
@@ -34,26 +36,26 @@ Player.prototype.move = function (obstacles, activated) {
   while (i--) {
       var rect = obstacles[i];
 
-      x.x = p.posX + vx;
-      x.y = p.posY;
-      x.w = p.width;
-      x.h = p.height;
+      x.posX = p.posX + vx;
+      x.posY = p.posY;
+      x.width = p.width;
+      x.height = p.height;
 
-      y.x = p.posX;
-      y.y = p.posY + vy;
-      y.w = p.width;
-      y.h = p.height;
+      y.posX = p.posX;
+      y.posY = p.posY + vy;
+      y.width = p.width;
+      y.height = p.height;
 
       // Move rectangle along x axis
       if (this.collides(x, rect, activated)) {
-          if(rect.name == "GOAL") console.log("MAQUINA");
+          if(rect.name == "GOAL") this.winner = true; 
           if (vx < 0) vx = rect.posX + rect.width - p.posX;
           if (vx > 0) vx = rect.posX - p.posX - p.width;
       }
 
       // Move rectangle along y axis
       if (this.collides(y, rect, activated)) {
-        if(rect.name == "GOAL") console.log("MAQUINA");
+        if(rect.name == "GOAL") this.winner = true;
         if(rect.name == "SPIKES" && activated == true){
           // Die and reset to Starting position
           this.die();
@@ -71,13 +73,37 @@ Player.prototype.move = function (obstacles, activated) {
 // Returns true iff a and b overlap
  Player.prototype.collides = function(a, b, activated) {
    if (b.name == "SPIKES" && activated == true) {
-      var x = a.x <= b.posX + b.width && a.x + a.w > b.posX ;
-      var y = a.y <= b.posYOn + b.heightON  && a.y + a.h > b.posYOn ;
+      var x = a.posX <= b.posX + b.width && a.posX + a.width > b.posX ;
+      var y = a.posY <= b.posYOn + b.heightON  && a.posY + a.height > b.posYOn ;
       return  x && y;
 
     } else {
-      var x = a.x <= b.posX + b.width && a.x + a.w > b.posX ;
-      var y = a.y <= b.posY + b.height  && a.y + a.h > b.posY ;
+
+      var x = a.posX <= b.posX + b.width && a.posX + a.width > b.posX ;
+      var y = a.posY <= b.posY + b.height  && a.posY + a.height > b.posY ;
       return  x && y;
     }
+};
+
+Player.prototype.shoot = function() {
+    console.log("Shoot AMMO");
+    if(this.bullets.length < 1){
+        this.bullets.push(new Bullet(this.posX, this.posY));
+    }
+
+};
+
+Player.prototype.updateBullets = function() {
+  for (var i = 0; i < this.bullets.length; i++) {
+    this.bullets[i].moveBullet();
+  }
+};
+
+Player.prototype.checkCollisionBullets = function(enemy) {
+  for (var i = 0; i < this.bullets.length; i++) {
+    if(this.collides(this.bullets[i], enemy)) {
+      enemy.hp -= this.bullets[i].damage;
+      this.bullets.splice(i);
+    };
+  }
 };

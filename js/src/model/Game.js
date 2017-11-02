@@ -1,26 +1,42 @@
-function Game(canvas, player) {
+function Game(canvas, lvl="Lvl1") {
+  this.player = new Player();
+
   this.canvas = canvas;
   this.context = canvas.getContext('2d');
 
+
+  switch (lvl) {
+    case "Lvl1":
+    this.firstMap = new Lvl1();
+      break;
+    case "Lvl2":
+    this.firstMap = new Lvl2();
+      break;
+    default:
+
+  }
+
+  console.log(this.firstMap);
   this.width = canvas.width = 1200;
   this.height = canvas.height = 600;
 
   this.scale = 5;
   this.obstacles = [];
-  this.firstMap = new Lvl2();
+  this.bullets = [];
 
   this.currentMap = this.firstMap.tiles;
   this.currentMapArray = this.firstMap.atlas.TextureAtlas.SubTexture;
 
   // Weapons start activated
   this.activado = true;
-  this.player = player;
   this.mainInterval = 0;
 
   this.isPaused = false;
   this.keys = [];
 
   this.moved = 0;
+
+
 
 }
 
@@ -42,6 +58,12 @@ var picklewalkRight1 = new Image()
 picklewalkRight1.src = './img/picklewalk-right1.png'
 var picklewalkRight2 = new Image()
 picklewalkRight2.src = './img/picklewalk-right2.png'
+var ratBoss = new Image()
+ratBoss.src = './img/ratboss.png'
+var ratBossDead = new Image()
+ratBossDead.src = './img/ratboss-dead.png'
+var bulletImage = new Image()
+bulletImage.src = './img/bullet.png'
 
 Game.prototype.update = function() {
   // Gravity
@@ -61,6 +83,10 @@ Game.prototype.update = function() {
   if (this.player.onFloor && this.keys[38]) {
     this.player.velY = -14;
   }
+
+  this.player.updateBullets();
+  this.player.checkCollisionBullets(this.boss);
+
 };
 
 
@@ -78,11 +104,8 @@ Game.prototype.drawPlayer = function() {
     var width = rick.width ;
     var height = rick.height;
     if(this.keys[37]){
-      if (this.player.posX < this.canvas.width/2 - this.player.width) {
-        this.moved += 1;
-        this.context.translate(this.player.velX * -1,0);
+      this.context.translate(this.player.velX * -1,0);
 
-      }
       switch (this.player.image) {
         case picklewalkLeft1:
         this.context.drawImage(picklewalkLeft, this.player.posX, this.player.posY, 50, 80);
@@ -97,11 +120,10 @@ Game.prototype.drawPlayer = function() {
         this.player.image = picklewalkLeft1;
       }
     } else if (this.keys[39]){
-      if (this.player.posX + this.moved > this.canvas.width/2) {
+      if (this.player.posX + this.moved > this.canvas.width/3 ) {
         this.moved += 1;
         this.context.translate(this.player.velX * -1,0);
       }
-        console.log(this.moved);
       switch (this.player.image) {
         case picklewalkRight1:
         this.context.drawImage(picklewalkRight, this.player.posX, this.player.posY, 50, 80);
@@ -138,6 +160,7 @@ Game.prototype.drawPlayer = function() {
 
 Game.prototype.drawBoard = function(primera) {
   if (primera != undefined) {
+    obstacles = [];
     var that = this;
      this.armorInteval = setInterval(function() {
 
@@ -147,6 +170,10 @@ Game.prototype.drawBoard = function(primera) {
         that.activado = false;
       }
     }, 1000);
+  }
+  if (this.firstMap.name === "Lvl1") {
+    this.player.width = 30;
+    this.player.height = 60;
   }
 
 for (var a = 0; a < this.currentMap.length; a++) {
@@ -248,6 +275,42 @@ for (var a = 0; a < this.currentMap.length; a++) {
           this.drawObject(1, r, c);
           break;
 
+        case 98:
+
+        if (primera != undefined) {
+          this.boss = new RatBoss(ratBoss.width, ratBoss.height, 256/this.scale * r, 256/this.scale * c);
+        }
+
+        if(this.bossAlive()){
+          this.context.drawImage(ratBoss,
+            256/this.scale * r, 256/this.scale * c , ratBoss.width, ratBoss.height);
+        } else {
+          this.context.drawImage(ratBossDead,
+            256/this.scale * r, 256/this.scale * c , ratBoss.width, ratBoss.height);
+        }
+
+            var filledRect = this.boss.hp / 50
+            for (var i = 0; i < filledRect; i++) {
+              this.context.beginPath();
+              this.context.fillStyle = "#FF0000";
+              this.context.fillRect(
+                256/this.scale * r + ratBoss.width / 10 * i,
+                256/this.scale * c - 20 ,
+                ratBoss.width / 10 , 10);
+            }
+
+
+
+          // this.context.rect(
+          //   256/this.scale * r + ratBoss.width / 10 * filledRect,
+          //   256/this.scale * c - 20 ,
+          //   ratBoss.width / 10 - 5 , 20);
+          // this.context.stroke();
+
+
+
+            break;
+
       }
     }
   }
@@ -275,23 +338,21 @@ Game.prototype.drawObject = function(n,r,c,resta,add) {
 
 }
 
+Game.prototype.drawBullet = function() {
+
+  for (var i = 0; i < this.player.bullets.length; i++) {
+    this.context.drawImage(bulletImage,
+      this.player.bullets[i].posX + this.player.width +10,
+      this.player.bullets[i].posY + 25,
+      this.player.bullets[i].width , this.player.bullets[i].height);
+  }
+}
+
 Game.prototype.pause = function() {
   clearInterval(this.armorInteval);
   clearInterval(this.mainInterval);
 }
 
-Game.prototype.start = function() {
-  var that = this,
-  ctx = this.context;
-  // Draw board with a parameter so all the object are saved into array for
-  // later check collisions
-  this.drawBoard('primera');
-
-  this.mainInterval = setInterval(function(){
-    that.update();
-    that.context.clearRect(0, 0, 2000, 2000);
-    that.drawBoard();
-    that.drawPlayer();
-  },1000 / 60);
-
-};
+Game.prototype.bossAlive = function(){
+    return this.boss.hp > 0 ? true : false;
+}
