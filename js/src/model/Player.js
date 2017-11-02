@@ -48,7 +48,7 @@ Player.prototype.move = function (obstacles, activated) {
 
       // Move rectangle along x axis
       if (this.collides(x, rect, activated)) {
-          if(rect.name == "GOAL") this.winner = true; 
+          if(rect.name == "GOAL") this.winner = true;
           if (vx < 0) vx = rect.posX + rect.width - p.posX;
           if (vx > 0) vx = rect.posX - p.posX - p.width;
       }
@@ -96,6 +96,7 @@ Player.prototype.shoot = function() {
 Player.prototype.updateBullets = function() {
   for (var i = 0; i < this.bullets.length; i++) {
     this.bullets[i].moveBullet();
+    if(this.bullets[i].posX > this.bullets[i].maxX) this.bullets.splice(i);
   }
 };
 

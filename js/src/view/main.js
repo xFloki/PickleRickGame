@@ -6,7 +6,7 @@ window.onload = function() {
   sprite.src = './img/Platfor_Tiles_Free.png';
 
   var audio = new Audio('./sounds/swifty.mp3');
-  // Property for audios to replay song when it is over 
+  // Property for audios to replay song when it is over
   audio.loop = true;
   audio.play();
 
@@ -27,12 +27,13 @@ document.onkeydown = document.onkeyup = function (e) {
 
    } else if( e.keyCode == 32 && game.firstMap.name !== "Lvl1"){
       game.player.shoot();
+      game.boss.shootPlayer(game.player);
     }
 
  };;
 
 sprite.onload = function() {
-    game = new Game(canvas);
+    game = new Game(canvas,"Lvl1");
 
     game.drawBoard('primera');
     game.mainInterval = setInterval(refreshGame,1000 / 60);
