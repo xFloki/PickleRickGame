@@ -74,8 +74,6 @@ section.press button:hover, section.press button.hover {
   font-size: 40px;
 }
 
-/*canvas {
-  background-image: url("../img/water.gif");
-  background-size: cover;
-  background-position: center;
-}*/
+body {
+  background-color: darkgray;
+}
