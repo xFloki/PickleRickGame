@@ -190,7 +190,7 @@ Game.prototype.drawBoard = function(saveObjects) {
             // STONE WALL
             case 21:
 
-              this.drawObject(21, r, c);
+              this.drawObject(35, r, c);
               break;
 
             // METAL PLATFORM
