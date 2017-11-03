@@ -4,6 +4,7 @@ window.onload = function() {
 
   var sprite = new Image();
   sprite.src = '../img/Platfor_Tiles_Free.png';
+  var currentTries = 0;
   var scores = [];
 
 document.onkeydown = document.onkeyup = function (e) {
@@ -22,13 +23,13 @@ document.onkeydown = document.onkeyup = function (e) {
 
    } else if( e.keyCode == 32 && game.firstMap.name !== "Lvl1"){
       game.player.shoot();
-      game.obstacles.push(game.boss.shootPlayer());
+      game.boss.shootPlayer();
     }
 
  };;
 
 sprite.onload = function() {
-    game = new Game(canvas,"Lvl1");
+    game = new Game(canvas,"Lvl2");
 
     game.drawBoard('primera');
     game.mainInterval = setInterval(refreshGame,1000 / 60);
@@ -40,6 +41,14 @@ function refreshGame(){
   game.drawBoard();
   game.drawPlayer();
   game.drawBullet();
+  console.log(game.dieFromRats());
+  if(game.player.alive == false){
+    currentTries = game.player.trys;
+    console.log(game.player.trys);
+    game = new Game(canvas, "Lvl2");
+    game.drawBoard('primera');
+    game.player.trys = currentTries;
+  }
   changeLvl();
 }
 
@@ -52,12 +61,19 @@ function changeLvl() {
   if(game.player.winner == true) {
     switch (game.firstMap.name) {
       case "Lvl1":
+      currentTries = game.player.trys;
       game = new Game(canvas, "Lvl2");
       game.drawBoard('primera');
+      game.player.trys = currentTries;
        break;
       case "Lvl2":
       scores.push([game.player.trys, new Date()]);
+      game.player.winner = false;
       console.log(scores);
+      $('#pause').hide();
+      $('canvas').hide();
+      $('#final-score').show();
+      $('#final-score span').text(game.player.trys);
       pauseGame();
         break;
       default:

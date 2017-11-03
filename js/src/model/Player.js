@@ -9,13 +9,13 @@ function Player (context) {
   this.onFloor = false;
   this.winner = false;
   this.image = "";
+  this.alive = true;
 
-  this.trys = 0;
+  this.trys = 1;
 
   this.bullets = [];
 
   this.context = context;
-
 }
 
 Player.prototype.die = function(){
@@ -41,6 +41,7 @@ Player.prototype.die = function(){
   }
 
   audio.play();
+  this.alive = false;
 
 };
 
@@ -70,7 +71,6 @@ Player.prototype.move = function (obstacles, activated) {
       // Move rectangle along x axis
       if (this.collides(x, rect, activated)) {
           if(rect.name == "GOAL") this.winner = true;
-
           if (vx < 0) vx = rect.posX + rect.width - p.posX;
           if (vx > 0) vx = rect.posX - p.posX - p.width;
       }
@@ -132,7 +132,7 @@ Player.prototype.checkCollisionBullets = function(enemy) {
       if(enemy.hp === 0) {
         var that = this;
         setTimeout(function(){
-          that.winner = true; }, 1500);
+          that.winner = true; }, 500);
       }
     };
   }

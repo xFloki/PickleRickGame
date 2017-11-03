@@ -1,7 +1,7 @@
 function RatBoss (width, height, x, y) {
   this.name = "RATBOSS";
-  this.maxHp = 500;
-  this.hp = 500;
+  this.maxHp = 50;
+  this.hp = 50;
   this.width = width;
   this.height = height;
   this.posX = x;

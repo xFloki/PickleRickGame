@@ -43,12 +43,38 @@ section.press button.hover {
 
 .blurred {
    filter: blur(10px);
-   display: block;
 }
 
-.pause {
+.score {
   display: block;
   position: absolute;
-  top: 50%; left:48%;
-  transform: translate(-50%,-50%);
+  top: 90px; left:150px;
+
+}
+
+#final-score {
+  width: 1200px;
+  height: 600px;
+  display: none;
+  margin: auto;
+  margin-top: 100px;
+  background-image: url("../img/play.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+#final-score h1, #final-score h2 {
+  color: white;
+
+}
+
+#final-score h1 {
+  margin-left: 200px;
+  padding-top: 120px;
+  font-size: 70px;
+}
+
+#final-score h2 {
+  margin-left: 210px;
+  font-size: 40px;
 }
