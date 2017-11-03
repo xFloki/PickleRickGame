@@ -79,6 +79,7 @@ Player.prototype.move = function (obstacles, activated) {
       if (this.collides(y, rect, activated)) {
         if(rect.name == "GOAL") this.winner = true;
         if(rect.name == "SPIKES" && activated == true){
+        if(rect.name == "PLATFORM") console.log("YUM");
           // Die and reset to Starting position
           this.die();
         } else {

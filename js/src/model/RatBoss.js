@@ -11,8 +11,6 @@ function RatBoss (width, height, x, y) {
 
   this.ratillas = [];
   this.vuelta = false;
-
-
 }
 
 RatBoss.prototype.attacks = function(){

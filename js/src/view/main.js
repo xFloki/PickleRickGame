@@ -30,6 +30,7 @@ window.onload = function() {
     } else if (e.keyCode == 32 && game.firstMap.name !== "Lvl1") {
       game.player.shoot();
       game.boss.shootPlayer();
+      console.log(game.obstacles);
     }
 
   };;

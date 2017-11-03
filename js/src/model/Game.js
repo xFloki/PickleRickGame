@@ -43,6 +43,8 @@ function Game(canvas, lvl = "Lvl1") {
   this.moved = 0;
   this.time = 0;
 
+  this.addObject = false;
+
 
 
 }
@@ -158,7 +160,8 @@ Game.prototype.drawPlayer = function() {
 
 Game.prototype.drawBoard = function(saveObjects) {
   if (saveObjects != undefined) {
-    obstacles = [];
+      this.obstacles = [];
+      this.addObject = true;
     if (this.firstMap.name === "Lvl1") {
       this.player.width = 30;
       this.player.height = 60;
@@ -169,6 +172,7 @@ Game.prototype.drawBoard = function(saveObjects) {
     (this.activado == false) ? this.activado = true: this.activado = false;
   }
 
+  var add = this.addObject;
 
   for (var a = 0; a < this.currentMap.length; a++) {
     for (var c = 0; c < this.currentMap[a].length; c++) {
@@ -177,12 +181,12 @@ Game.prototype.drawBoard = function(saveObjects) {
 
           // GROUND
           case 01:
-            this.drawObject(1, r, c, undefined, true);
+            this.drawObject(1, r, c, undefined, add);
             break;
 
             // SMALL GROUND
           case 02:
-            this.drawObject(2, r, c, true, true);
+            this.drawObject(2, r, c, true, add, "PLATFOTM");
             break;
 
             // TRIANGLE GROUND
@@ -193,7 +197,7 @@ Game.prototype.drawBoard = function(saveObjects) {
             // STONE PLATFORM
           case 15:
 
-            this.drawObject(15, r, c, undefined, true);
+            this.drawObject(15, r, c, undefined, add);
             break;
 
             // STONE WALL
@@ -205,7 +209,7 @@ Game.prototype.drawBoard = function(saveObjects) {
             // METAL PLATFORM
           case 26:
 
-            this.drawObject(26, r, c, true, true);
+            this.drawObject(26, r, c, true, add);
             break;
 
             // SKY
@@ -215,7 +219,7 @@ Game.prototype.drawBoard = function(saveObjects) {
 
             // BOX
           case 35:
-            this.drawObject(35, r, c, undefined, true);
+            this.drawObject(35, r, c, undefined, add);
             break;
 
             // SIGN
@@ -241,8 +245,10 @@ Game.prototype.drawBoard = function(saveObjects) {
             // SIGN
           case 50:
             this.drawObject(50, r, c, true);
-            this.obstacles.push(new Obstacle("GOAL", width, height, 256 / this.scale * r, 256 / this.scale * c));
-            break;
+            if(saveObjects != undefined){
+              this.obstacles.push(new Obstacle("GOAL", width, height, 256 / this.scale * r, 256 / this.scale * c));
+            }
+              break;
 
             // SPIKES
           case 62:
@@ -293,14 +299,19 @@ Game.prototype.drawBoard = function(saveObjects) {
             break;
 
         }
+
+          this.addObject = false;
       }
     }
   }
 
   $('.score span').text(this.player.trys);
+    //
+    // console.log(this.obstacles);
+
 };
 
-Game.prototype.drawObject = function(n, r, c, resta, add) {
+Game.prototype.drawObject = function(n, r, c, resta, add, name="OBSTACLE") {
 
   var image = this.currentMapArray[n - 1];
   var width = image['-width'] / this.scale;
@@ -314,13 +325,12 @@ Game.prototype.drawObject = function(n, r, c, resta, add) {
   this.context.drawImage(sprite, image['-x'], image['-y'], image['-width'], image['-height'],
     256 / this.scale * r, 256 / this.scale * c - resta, width, height);
   if (add == true) {
-    this.obstacles.push(new Obstacle("Obstacle", width, height, 256 / this.scale * r, 256 / this.scale * c - resta));
+    this.obstacles.push(new Obstacle(name, width, height, 256 / this.scale * r, 256 / this.scale * c - resta));
   }
 
 }
 
 Game.prototype.drawBullet = function() {
-
   for (var i = 0; i < this.player.bullets.length; i++) {
     this.context.drawImage(bulletImage,
       this.player.bullets[i].posX + this.player.width + 10,
