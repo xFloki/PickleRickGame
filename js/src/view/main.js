@@ -29,7 +29,7 @@ document.onkeydown = document.onkeyup = function (e) {
  };;
 
 sprite.onload = function() {
-    game = new Game(canvas,"Lvl2");
+    game = new Game(canvas,"Lvl1");
 
     game.drawBoard('primera');
     game.mainInterval = setInterval(refreshGame,1000 / 60);
