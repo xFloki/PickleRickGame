@@ -30,7 +30,6 @@ document.onkeydown = document.onkeyup = function (e) {
 
 sprite.onload = function() {
     game = new Game(canvas,"Lvl1");
-
     game.drawBoard('primera');
     game.mainInterval = setInterval(refreshGame,1000 / 60);
 };
@@ -41,7 +40,6 @@ function refreshGame(){
   game.drawBoard();
   game.drawPlayer();
   game.drawBullet();
-  console.log(game.dieFromRats());
   if(game.player.alive == false){
     currentTries = game.player.trys;
     console.log(game.player.trys);
