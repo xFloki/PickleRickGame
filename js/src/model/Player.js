@@ -129,6 +129,9 @@ Player.prototype.checkCollisionBullets = function(enemy) {
     if(this.collides(this.bullets[i], enemy)) {
       enemy.hp -= this.bullets[i].damage;
       this.bullets.splice(i);
+      // AUDIO RAT GETS HURT
+      var audio = new Audio('../sounds/rat.wav');
+      audio.play();
       if(enemy.hp === 0) {
         var that = this;
         setTimeout(function(){

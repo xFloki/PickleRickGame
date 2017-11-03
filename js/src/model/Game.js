@@ -4,20 +4,30 @@ function Game(canvas, lvl = "Lvl1") {
 
   this.player = new Player(this.context);
 
+  this.gravity = 1;
 
-  switch (lvl) {
-    case "Lvl1":
-      this.firstMap = new Lvl1();
-      break;
-    case "Lvl2":
-      this.firstMap = new Lvl2();
-      break;
-    default:
-
-  }
 
   this.width = canvas.width = 1200;
   this.height = canvas.height = 600;
+
+
+
+    switch (lvl) {
+      case "Lvl0":
+        this.firstMap = new Lvl0();
+        this.gravity = 0;
+        this.player.posX = this.width /2 -10;
+        this.player.posY = 100;
+        break;
+      case "Lvl1":
+        this.firstMap = new Lvl1();
+        break;
+      case "Lvl2":
+        this.firstMap = new Lvl2();
+        break;
+      default:
+
+    }
 
   this.scale = 5;
   this.obstacles = [];
@@ -68,7 +78,7 @@ ratilla.src = '../img/ratilla.png'
 
 Game.prototype.update = function() {
   // Gravity
-  this.player.velY += 1;
+  this.player.velY += this.gravity;
   // Right - Left movement
   this.player.velX = 6 * (!!this.keys[39] - !!this.keys[37]); //
   // Move the player and detect collisions

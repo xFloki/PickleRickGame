@@ -4,6 +4,7 @@ window.onload = function() {
 
   var sprite = new Image();
   sprite.src = '../img/Platfor_Tiles_Free.png';
+
   var currentTries = 0;
   var scores = [];
 
@@ -40,14 +41,13 @@ function refreshGame(){
   game.drawBoard();
   game.drawPlayer();
   game.drawBullet();
-  if(game.player.alive == false){
+  changeLvl();
+  if(game.player.alive == false && game.firstMap.name == "Lvl2"){
     currentTries = game.player.trys;
-    console.log(game.player.trys);
     game = new Game(canvas, "Lvl2");
     game.drawBoard('primera');
     game.player.trys = currentTries;
   }
-  changeLvl();
 }
 
 function pauseGame() {
