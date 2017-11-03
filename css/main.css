@@ -1,11 +1,9 @@
 canvas {
-    padding: 0;
-    margin: auto;
-    display: block;
-    margin-top: 100px;
-
+  padding: 0;
+  margin: auto;
+  display: block;
+  margin-top: 100px;
 }
-
 
 #startGame {
   width: 1200px;
@@ -15,7 +13,6 @@ canvas {
   background-image: url("../img/play.jpg");
   background-size: cover;
   background-position: center;
-
 }
 
 section.press button {
@@ -36,20 +33,19 @@ section.press button {
   margin-top: 250px;
 }
 
-section.press button:hover,
-section.press button.hover {
+section.press button:hover, section.press button.hover {
   background-color: #417cb8
 }
 
 .blurred {
-   filter: blur(10px);
+  filter: blur(10px);
 }
 
 .score {
   display: block;
   position: absolute;
-  top: 90px; left:150px;
-
+  top: 90px;
+  left: 150px;
 }
 
 #final-score {
@@ -65,7 +61,6 @@ section.press button.hover {
 
 #final-score h1, #final-score h2 {
   color: white;
-
 }
 
 #final-score h1 {

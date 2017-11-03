@@ -1,5 +1,5 @@
 function Lvl0() {
-  Map.call(this, "Lvl1",[
+  Map.call(this, "Lvl0",[
     // BACKGROUND
     [
       [34,34,34,34,34,00,00,00,00,00,00,00,00,00,00,00,00,00,34,34,34,34,34,34],

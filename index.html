@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Game</title>
-    <!-- <script type="text/javascript" src="./js/src/model/view/"></script>
-    <script type="text/javascript" src="./js/src/view/view/"></script> -->
-    <link rel="stylesheet" type="text/css" href="./css/main.css">
-    <script type="text/javascript" src="./js/lib/jquery-3.2.1.slim.min.js">  </script>
-  </head>
-  <body>
+
+<head>
+  <meta charset="utf-8">
+  <title>Game</title>
+  <link rel="stylesheet" type="text/css" href="./css/main.css">
+  <script type="text/javascript" src="./js/lib/jquery-3.2.1.slim.min.js">
+  </script>
+</head>
+
+<body>
 
   <div id="startGame">
     <section class="press">
-      <button type="button" name="button" id="play"
-       onclick="location.href='./views/game.html';">PLAY GAME</button>
+      <button type="button" name="button" id="play" onclick="location.href='./views/game.html';">PLAY GAME</button>
     </section>
     <section class="press">
-      <button type="button" name="button"
-       onclick="location.href='./views/score.html';">SCORES</button>
+      <button type="button" name="button" onclick="location.href='./views/score.html';">SCORES</button>
     </section>
   </div>
 
   <script>
-  // Property for audios to replay song when it is over
-  var audio = new Audio('./sounds/swifty.mp3');
-  audio.loop = true;
-  audio.play();
+    // Property for audios to replay song when it is over
+    var audio = new Audio('./sounds/swifty.mp3');
+    audio.loop = true;
+    audio.play();
 
-  $('#play').click(function(){
-    audio.pause();
-    audio.currentTime = 0;;
-  })
+    $('#play').click(function() {
+      audio.pause();
+      audio.currentTime = 0;;
+    })
+    
   </script>
-  </body>
+</body>
+
 </html>
